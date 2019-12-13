@@ -1,6 +1,6 @@
 #inputcontent
 {
-    width: 550px;
+    width: 682px;
     margin: 0 auto;
     position: relative;
 }
@@ -16,20 +16,20 @@
 }
 #inputmain table
 {
-    width: 488px;
+    width: 620px;
     margin-top: 5px;
     border-top: #b0cde9 2px solid;
     border-collapse: collapse;
 }
 #inputmain th
 {
-    width: 110px;
+    width: 130px;
     padding: 5px 15px;
     border-bottom: #d2dbe7 1px solid;
     background-color: #edf3fa;
     font-weight: normal;
     color: #1f6cba;
-    text-align: left;
+    text-align: center;
 }
 #inputmain td
 {
@@ -55,7 +55,7 @@
 }
 #inputmain .buttons
 {
-    width: 486px;
+    width: 620px;
     height: 30px;
     margin-top: 25px;
     margin-bottom: 25px;

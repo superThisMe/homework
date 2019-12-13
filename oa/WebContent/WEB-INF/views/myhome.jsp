@@ -7,7 +7,7 @@
 <head>
 <meta charset='utf-8' />
 <title>Home</title>
-<link rel='Stylesheet' href='/demoweb/styles/default.css' />
+<link rel='Stylesheet' href='/oa/styles/default.css' />
 </head>
 <body>
 

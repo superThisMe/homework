@@ -10,7 +10,7 @@ public class Product {
 
 	private int productNo;
 	private String productName;
-	private String price;
+	private int price;
 	private Date regDate;
 	private String content;
 	private int sales;

@@ -47,7 +47,7 @@ public class ProductDao {
 				Product pr = new Product();
 				pr.setProductNo(rs.getInt(1));
 				pr.setProductName(rs.getString(2));
-				pr.setPrice(String.valueOf(rs.getInt(3)));
+				pr.setPrice(rs.getInt(3));
 				pr.setRegDate(rs.getDate(4));
 				pr.setSales(rs.getInt(5));
 				pr.setActive(rs.getBoolean(6));
@@ -87,7 +87,7 @@ public class ProductDao {
 					"VALUES (PRODUCT_SEQUENCE.NEXTVAL, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, pr.getProductName());
-			pstmt.setInt(2, Integer.parseInt(pr.getPrice()));
+			pstmt.setInt(2, pr.getPrice());
 			pstmt.setString(3, pr.getContent());
 			
 			//4. 명령 실행
@@ -220,7 +220,7 @@ public class ProductDao {
 				pr = new Product();
 				pr.setProductNo(rs.getInt(1));
 				pr.setProductName(rs.getString(2));
-				pr.setPrice(String.valueOf(rs.getInt(3)));
+				pr.setPrice(rs.getInt(3));
 				pr.setRegDate(rs.getDate(4));
 				pr.setContent(rs.getString(5));
 				pr.setSales(rs.getInt(6));
@@ -338,6 +338,265 @@ public class ProductDao {
 		}
 		
 		return pics; //조회된 데이터를 저장항 List 객체 반환
+	}
+
+	public void deleteProductByPrNo(int prNo) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			//1. 드라이버 등록
+			Class.forName("oracle.jdbc.OracleDriver");
+			
+			//2. 연결 만들기
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",// 연결 정보
+					"admin", "060104"); //계정 정보
+			
+			//3. SQL 작성 + 명령 만들기
+			String sql = 
+					"UPDATE product " +
+					"SET active = '0' " +
+					"WHERE productno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, prNo);
+			
+			//4. 명령 실행
+			pstmt.executeUpdate(); // insert, update, delete를 위한 메서드
+			
+			//5. 결과가 있다면 결과 처리 (select)
+		} catch (Exception ex) {
+			
+		} finally {
+			//6. 연결 종료
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}
+		
+	}
+
+
+	public void deleteManualByManualNo(int manualNo) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			//1. 드라이버 등록
+			Class.forName("oracle.jdbc.OracleDriver");
+			
+			//2. 연결 만들기
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",// 연결 정보
+					"admin", "060104"); //계정 정보
+			
+			//3. SQL 작성 + 명령 만들기
+			String sql = 
+					"UPDATE PRODUCTMANUAL " +
+					"SET active = '0' " +
+					"WHERE manualno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, manualNo);
+			
+			//4. 명령 실행
+			pstmt.executeUpdate(); // insert, update, delete를 위한 메서드
+			
+			//5. 결과가 있다면 결과 처리 (select)
+		} catch (Exception ex) {
+			
+		} finally {
+			//6. 연결 종료
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}
+		
+	}
+
+	public void deletePicByPicNo(int picNo) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			//1. 드라이버 등록
+			Class.forName("oracle.jdbc.OracleDriver");
+			
+			//2. 연결 만들기
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",// 연결 정보
+					"admin", "060104"); //계정 정보
+			
+			//3. SQL 작성 + 명령 만들기
+			String sql = 
+					"UPDATE PRODUCTPIC " +
+					"SET active = '0' " +
+					"WHERE picno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, picNo);
+			
+			//4. 명령 실행
+			pstmt.executeUpdate(); // insert, update, delete를 위한 메서드
+			
+			//5. 결과가 있다면 결과 처리 (select)
+		} catch (Exception ex) {
+			
+		} finally {
+			//6. 연결 종료
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}
+		
+	}
+	
+	public void updateProduct(Product pr) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			//1. 드라이버 등록
+			Class.forName("oracle.jdbc.OracleDriver");
+			
+			//2. 연결 만들기
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",// 연결 정보
+					"admin", "060104"); //계정 정보
+			
+			//3. SQL 작성 + 명령 만들기
+			String sql = 
+					"UPDATE product " +
+					"SET productname = ?, price = ?, sales = ?, content = ? " +
+					"WHERE productno = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pr.getProductName());
+			pstmt.setInt(2, pr.getPrice());
+			pstmt.setInt(3, pr.getSales());
+			pstmt.setString(4, pr.getContent());
+			pstmt.setInt(5, pr.getProductNo());
+			
+			//4. 명령 실행
+			pstmt.executeUpdate(); // insert, update, delete를 위한 메서드
+			
+			//5. 결과가 있다면 결과 처리 (select)
+		} catch (Exception ex) {
+			
+		} finally {
+			//6. 연결 종료
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}
+		
+	}
+
+	public List<Product> searchByProductName(String word) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null; //조회 결과를 참조하는 변수
+		
+		ArrayList<Product> prArray = new ArrayList<>(); // 조회 결과를 저장할 변수
+		
+		try {
+			//1. 드라이버 등록
+			Class.forName("oracle.jdbc.OracleDriver");
+			
+			//2. 연결 만들기
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",// 연결 정보
+					"admin", "060104"); //계정 정보
+			
+			//3. SQL 작성 + 명령 만들기
+			String sql = 
+					"SELECT productno, productname, price, regdate, sales, active " +
+					"FROM product " +
+					"WHERE productname LIKE ? " +
+					"ORDER BY productno DESC";
+				
+			pstmt = conn.prepareStatement(sql);
+			String keyword = "%" + word + "%";
+			pstmt.setString(1, keyword);
+			
+			//4. 명령 실행
+			rs = pstmt.executeQuery(); // select를 위한 메서드
+			
+			//5. 결과가 있다면 결과 처리 (select)
+			while (rs.next()) { //조회된 데이터가 있다면
+				//조회된 데이터를 upload 객체에 저장
+				Product pr = new Product();
+				pr.setProductNo(rs.getInt(1));
+				pr.setProductName(rs.getString(2));
+				pr.setPrice(rs.getInt(3));
+				pr.setRegDate(rs.getDate(4));
+				pr.setSales(rs.getInt(5));
+				pr.setActive(rs.getBoolean(6));
+				
+				prArray.add(pr); // 한 건의 데이터를 데이터 목록에 추가
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			//6. 연결 종료
+			try { rs.close(); } catch (Exception ex) {}
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}		
+		return prArray;
+	}
+
+	public List<Product> searchByProductContent(String word) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null; //조회 결과를 참조하는 변수
+		
+		ArrayList<Product> prArray = new ArrayList<>(); // 조회 결과를 저장할 변수
+		
+		try {
+			//1. 드라이버 등록
+			Class.forName("oracle.jdbc.OracleDriver");
+			
+			//2. 연결 만들기
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",// 연결 정보
+					"admin", "060104"); //계정 정보
+			
+			//3. SQL 작성 + 명령 만들기
+			String sql = 
+					"SELECT productno, productname, price, regdate, sales, active " +
+					"FROM product " +
+					"WHERE content LIKE ? " +
+					"ORDER BY productno DESC";
+				
+			pstmt = conn.prepareStatement(sql);
+			String keyword = "%" + word + "%";
+			pstmt.setString(1, keyword);
+			
+			//4. 명령 실행
+			rs = pstmt.executeQuery(); // select를 위한 메서드
+			
+			//5. 결과가 있다면 결과 처리 (select)
+			while (rs.next()) { //조회된 데이터가 있다면
+				//조회된 데이터를 upload 객체에 저장
+				Product pr = new Product();
+				pr.setProductNo(rs.getInt(1));
+				pr.setProductName(rs.getString(2));
+				pr.setPrice(rs.getInt(3));
+				pr.setRegDate(rs.getDate(4));
+				pr.setSales(rs.getInt(5));
+				pr.setActive(rs.getBoolean(6));
+				
+				prArray.add(pr); // 한 건의 데이터를 데이터 목록에 추가
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			//6. 연결 종료
+			try { rs.close(); } catch (Exception ex) {}
+			try { pstmt.close(); } catch (Exception ex) {}
+			try { conn.close(); } catch (Exception ex) {}
+		}		
+		return prArray;
 	}
 
 	

@@ -10,8 +10,8 @@
 <head>
 	<meta charset="utf-8" />
 	<title>자료업로드</title>
-	<link rel="Stylesheet" href="/demoweb/styles/default.css" />
-	<link rel="Stylesheet" href="/demoweb/styles/input.css" />
+	<link rel="Stylesheet" href="/oa/styles/default.css" />
+	<link rel="Stylesheet" href="/oa/styles/input.css" />
 </head>
 <body>
 
@@ -41,22 +41,39 @@
 		            	<td>${ product.regDate }</td>
 		            </tr>
 		            <tr>
-		                <th>제품 사진</th>
+		                <th>제품사진</th>
 		                <td>
 		                <c:forEach var="pic" items="${ product.productPics }">
 		                <c:choose>
 		                <c:when test="${ pic.active }">
-		                <img src="C:\workspace\web-application\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\oa\upload-files\${ pic.savedPicName }">
+		                <img src="/oa/upload-files/${ pic.savedPicName }" alt="${ pic.userPicName }" width="500px">
 		                </c:when>
 		                <c:otherwise>
-		                ${ pic.userPicName } (삭제된 사진)
+		                <span style="color:lightgray">${ pic.userPicName } (삭제된 사진)</span>
 		                </c:otherwise>
 		                </c:choose>
 		                </c:forEach>
 		                </td>
 		            </tr>
 		            <tr>
-		                <th>자료설명</th>
+		                <th>제품<br>매뉴얼</th>
+		                <td>
+		                <c:forEach var="manual" items="${ product.productManuals }">
+		                <c:choose>
+		                <c:when test="${ manual.active }">
+		                <a href="/oa/upload-files/${ manual.savedManualName }">${ manual.userManualName }</a>
+		                <br>
+		                </c:when>
+		                <c:otherwise>
+		                <span style="color:lightgray">${ manual.userManualName } (삭제된 매뉴얼)</span>
+		                <br>
+		                </c:otherwise>
+		                </c:choose>
+		                </c:forEach>
+		                </td>
+		            </tr>
+		            <tr>
+		                <th>설명</th>
 <%-- 줄바꿈 문자열을 저장하고 있는 변수 만들기(EL) --%>	
 <c:set var="enter" value="
 " />
@@ -84,7 +101,7 @@
 		        		});
 		        		
 		        		$("#delete_button").on('click', function(event) {
-		        			var ok = confirm("${product.productdNo}번 제품을 삭제할까요?");
+		        			var ok = confirm("${ product.productNo }번 ${ product.productName } 제품을 삭제할까요?");
 		        			if (!ok) {
 			        			//<a 를 통한 요청이므로 주소 뒤에 ?key=value 형식을 써서 데이터 전송
 			        			event.preventDefault();

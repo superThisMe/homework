@@ -42,4 +42,38 @@ public class ProductService {
 		return pr;
 	}
 
+	public void delete(int prNo) {
+		prDao.deleteProductByPrNo(prNo);
+	}
+
+	public void updateProduct(Product pr) {
+		prDao.updateProduct(pr);
+		for (ProductPic pic : pr.getProductPics()) {
+			pic.setProductNo(pr.getProductNo());
+			prDao.insertProductPic(pic);
+		}
+		for (ProductManual manual : pr.getProductManuals()) {
+			manual.setProductNo(pr.getProductNo());
+			prDao.insertProductManual(manual);
+		}
+	}
+
+	public void deleteManual(int manualNo) {
+		prDao.deleteManualByManualNo(manualNo);
+	}
+
+	public void deletePic(int picNo) {
+		prDao.deletePicByPicNo(picNo);		
+	}
+
+	public List<Product> SearchByPrName(String word) {
+		List<Product> prList = prDao.searchByProductName(word);
+		return prList;
+	}
+
+	public List<Product> SearchByPrContent(String word) {
+		List<Product> prList = prDao.searchByProductContent(word);
+		return prList;
+	}
+
 }

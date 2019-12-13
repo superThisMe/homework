@@ -1,6 +1,7 @@
 package oa.servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,35 +13,31 @@ import javax.servlet.http.HttpServletResponse;
 import oa.service.ProductService;
 import oa.vo.Product;
 
-@WebServlet("/product/prdetail.action")
-public class ProductDatailServlet extends HttpServlet {
+@WebServlet("/product/search.action")
+public class ProductSearchServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		String sPrNo = req.getParameter("productNo");
-		int prNo = -1;
-		try {
-			prNo = Integer.parseInt(sPrNo);
-		} catch (Exception e) {
-			resp.sendRedirect("prlist.action");
-			return;
-		}
-		
 		ProductService prService = new ProductService();
-		Product pr = prService.findByProductNo(prNo);
 		
-		if (pr == null) {
-			resp.sendRedirect("prlist.action");
-			return;
+		String set = req.getParameter("searchSet");
+		String word = req.getParameter("keyword");
+		List<Product> prList = null;
+		
+		
+		if (set.equals("productName")) {
+			prList = prService.SearchByPrName(word);
+		} else {
+			prList = prService.SearchByPrContent(word);
 		}
 		
-		req.setAttribute("product", pr);
+		req.setAttribute("prList", prList);
 		
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/product/prdetail.jsp");
-		dispatcher.forward(req, resp);		
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/product/searchlist.jsp");
+		dispatcher.forward(req, resp);
 		
 	}
 	

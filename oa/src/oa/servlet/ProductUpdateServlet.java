@@ -23,15 +23,35 @@ import oa.vo.Product;
 import oa.vo.ProductManual;
 import oa.vo.ProductPic;
 
-@WebServlet("/product/reg.action")
-public class ProductRegServlet extends HttpServlet {
+@WebServlet("/product/update.action")
+public class ProductUpdateServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/product/reg.jsp");
+		String sPrNo = req.getParameter("productNo");
+		int prNo = -1;
+		try {
+			prNo = Integer.parseInt(sPrNo);
+		} catch (Exception ex) { // 잘못된 자료번호인 경우
+			resp.sendRedirect("prlist.action"); // 다시 목록으로 이동
+			return;
+		}
+
+		ProductService prService = new ProductService();
+		Product pr = prService.findByProductNo(prNo);
+
+		if (pr == null) { // 조회 실패
+			resp.sendRedirect("prlist.action");
+			return;
+		}
+
+		// 3. JSP에서 사용할 수 있도록 조회된 데이터를 request 객체에 저장
+		req.setAttribute("product", pr);
+
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/product/prupdate.jsp");
 		dispatcher.forward(req, resp);
 
 	}
@@ -68,16 +88,20 @@ public class ProductRegServlet extends HttpServlet {
 				if (item.isFormField()) {
 					if (item.getFieldName().equals("productName")) {
 						pr.setProductName(item.getString("UTF-8"));
+					} else if (item.getFieldName().equals("productNo")) {
+						String sPrNo = item.getString("UTF-8");
+						pr.setProductNo(Integer.parseInt(sPrNo));
 					} else if (item.getFieldName().equals("price")) {
 						pr.setPrice(Integer.parseInt(item.getString("UTF-8")));
+					} else if (item.getFieldName().equals("sales")) {
+						pr.setSales(Integer.parseInt(item.getString("UTF-8")));
 					} else if (item.getFieldName().equals("content")) {
 						pr.setContent(item.getString("UTF-8"));
 					}
-				} else {
-					String fileName = item.getName(); // 파일 이름 가져오기
-					if (fileName != null && fileName.length() > 0) { // 내용이 있는 경우
-						if (fileName.contains("\\")) { // iexplore 경우
-							// C:\AAA\BBB\CCC.png -> CCC.png
+				} else { // file인 경우
+					String fileName = item.getName();
+					if (fileName != null && fileName.length() > 0) {
+						if (fileName.contains("\\")) {
 							fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
 						}
 
@@ -110,9 +134,9 @@ public class ProductRegServlet extends HttpServlet {
 		pr.setProductPics(pics);
 
 		ProductService prService = new ProductService();
-		prService.writeProduct(pr);
+		prService.updateProduct(pr);
 
 		resp.sendRedirect("prlist.action");
-	}
 
+	}
 }
